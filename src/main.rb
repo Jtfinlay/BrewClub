@@ -9,4 +9,9 @@
 
 require './api_keys'
 
-// todo: jtfinlay: ...
+if CLIENT_ID.empty? or CLIENT_SECRET.empty?
+    puts "The Untappd client ID and secret must be set. Please do so in api_keys.rb"
+    exit
+end
+
+# todo: jtfinlay: ...

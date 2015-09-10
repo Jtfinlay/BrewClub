@@ -7,5 +7,6 @@
 # Author: James Finlay
 ##
 
-CLIENT_ID = "<put client_id here>"
-CLIENT_SECRET = "<put client_secret here>"
+# TODO: Fill these with your Untappd Client ID & Secret
+CLIENT_ID = ""
+CLIENT_SECRET = ""
