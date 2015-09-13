@@ -8,5 +8,5 @@
 ##
 
 # TODO: Fill these with your Untappd Client ID & Secret
-CLIENT_ID = ""
-CLIENT_SECRET = ""
+CLIENT_ID = ENV['UNTAPPD_ID'] || ""
+CLIENT_SECRET = ENV['UNTAPPD_SECRET'] || ""
