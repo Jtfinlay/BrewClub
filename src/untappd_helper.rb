@@ -7,16 +7,15 @@
 # Author: James Finlay
 ##
 
-#
-# The +UntappdHelper+ object manages API calls and responses with the Untappd
-# service.
-#
-
 require 'net/http'
 require 'rubygems'
 require 'json'
 require './api_keys'
 
+#
+# The +UntappdHelper+ object manages API calls and responses with the Untappd
+# service.
+#
 module UntappdHelper
     
     UNTAPPD_URL = "https://api.untappd.com/v4/"

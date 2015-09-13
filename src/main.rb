@@ -16,9 +16,19 @@ if CLIENT_ID.empty? or CLIENT_SECRET.empty?
 end
 
 helper = DistinctBeers.new
-puts helper.pullAllDistinctBeers("jtfinlay")
+users = ["jtfinlay", "esdegraff", "jviau"]
+
+
+beer_collection = []
+users.each { |user|
+    beers = helper.pullAllDistinctBeers(user)
+    puts user + " has " + beers.length.to_s + " distinct beers"
+    beer_collection.concat beers
+}
+
+distinct_beers = beer_collection.uniq{|b| b.name}
+
+puts "Total of " + beer_collection.length.to_s + " shared beers"
+puts "Total of " + distinct_beers.length.to_s + " distinct beers"
 
 puts "Complete"
-
-# todo: jtfinlay: ...
-

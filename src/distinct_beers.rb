@@ -13,6 +13,7 @@
 #
 
 require './untappd_helper'
+require './beer'
 
 class DistinctBeers
     include UntappdHelper
@@ -46,7 +47,7 @@ class DistinctBeers
             offset += response["beers"]["count"]
 
             break if response["beers"]["count"] == 0
-            results << response
+            results.concat BeerModel.populateFromJsonList(response)
         end
 
         return results
