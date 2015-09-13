@@ -52,6 +52,7 @@ module UntappdHelper
     #
     def VerifyReturnCode(response)
         if response["meta"]["code"] != 200
+            # todo: jtfinlay: Don't use general exception
             raise Exception.new(response), "Error code received from Untappd"
         end
     end
