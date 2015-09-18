@@ -28,8 +28,7 @@ class DistinctBeers
     # limit: The number of results to return (max of 50)
     #
     def pullDistinctBeers(username, offset, limit=50)
-        params = [ "offset=" + offset.to_s,
-                    "limit=" + limit.to_s ]
+        params = [ "offset=#{offset.to_s}", "limit=#{limit.to_s}" ]
         return GET(username, BEER_SEARCH_METHOD, params)["response"]
     end
 

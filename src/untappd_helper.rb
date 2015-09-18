@@ -19,7 +19,7 @@ require './api_keys'
 module UntappdHelper
     
     UNTAPPD_URL = "https://api.untappd.com/v4/"
-    CLIENT_EXT = "client_id="+CLIENT_ID+"&client_secret="+CLIENT_SECRET
+    CLIENT_EXT = "client_id=#{CLIENT_ID}&client_secret=#{CLIENT_SECRET}"
 
     #
     # Perform GET to query unauthenticated method from Untappd
@@ -31,10 +31,10 @@ module UntappdHelper
     def GET(user_name, method_name, params)
 
         url = UNTAPPD_URL
-        url += method_name + user_name + "?" + CLIENT_EXT
+        url += "#{method_name}#{user_name}?#{CLIENT_EXT}"
 
         params.each do |param|
-            url += "&" + param
+            url += "&#{param}"
         end
 
         content = Net::HTTP.get(URI(url))

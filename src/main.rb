@@ -20,10 +20,10 @@ end
 
 puts "Pulling store catalogue"
 
-crawler = CrawlTotalWine.new
-store_catalog = crawler.crawlAllPages()
+crawler = CrawlTotalWine.new("totalWine")
+crawler.crawlAllPages
 
-puts "#{store_catalog.length.to_s} beer types found"
+puts "#{crawler.db.execute('SELECT count(*) FROM totalWine')[0][0]} beer types found"
 
 ##### Untappd Logic #####
 
@@ -35,14 +35,14 @@ users = ["jtfinlay", "esdegraff", "jviau"]
 beer_collection = []
 users.each { |user|
     beers = helper.pullAllDistinctBeers(user)
-    puts user + " has " + beers.length.to_s + " distinct beers"
+    puts "#{user} has #{beers.length.to_s} distinct beers"
     beer_collection.concat beers
 }
 
 distinct_beers = beer_collection.uniq{|b| b.name}
 
-puts "Total of " + beer_collection.length.to_s + " shared beers"
-puts "Total of " + distinct_beers.length.to_s + " distinct beers"
+puts "Total of #{beer_collection.length.to_s} beers"
+puts "Total of #{distinct_beers.length.to_s} distinct beers"
 
 puts "Complete"
 
