@@ -11,7 +11,7 @@ require 'test/unit'
 require 'json'
 require 'sqlite3'
 require_relative 'helper'
-require_relative '../beer.rb'
+require_relative '../src/beer.rb'
 
 class TestBeer < Test::Unit::TestCase
 
