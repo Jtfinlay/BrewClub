@@ -8,6 +8,7 @@
 ##
 
 require 'test/unit'
+require_relative 'helper'
 require_relative '../src/untappd_helper'
 
 class TestUntappdHelper < Test::Unit::TestCase
