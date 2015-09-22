@@ -7,28 +7,16 @@
 # Author: James Finlay
 ##
 
-gem 'test-unit'
-
 require 'test/unit'
 require 'json'
-require './test_helper'
+require 'sqlite3'
+require_relative 'helper'
 require_relative '../beer.rb'
 
 class TestBeer < Test::Unit::TestCase
 
-    def test_initialize
-        b = TestHelper.loadMockData("mocks/RinceCochon.json")
-
-        m = BeerModel.new(b["bid"], b["beer_name"], b["beer_label"], b["beer_abv"],
-            b["beer_ibu"], b["beer_style"], b["beer_description"],
-            b["rating_score"], b["rating_count"])
-
-        assert_equal b["bid"], m.id
-
-    end
-
     def test_populateFromJsonList
-        data = TestHelper.loadMockData("mocks/DistinctBeerList.json")
+        data = Helper.loadMockData("mocks/DistinctBeerList.json")
         response = data["response"]
 
         assert_not_nil response
@@ -37,6 +25,16 @@ class TestBeer < Test::Unit::TestCase
         result = BeerModel.populateFromJsonList(response)
 
         assert_equal response["beers"]["count"], result.length
+    end
+
+    def test_populateFromCrawler
+
+        db = SQLite3::Database.open "mocks/TotalWine.db"
+        assert_equal db.execute("SELECT * FROM totalWine").length, 50
+
+        result = BeerModel.new(*db.execute("SELECT * FROM totalWine").first)
+        assert_not_nil result
+        assert_not_nil result.name
     end
 
 end

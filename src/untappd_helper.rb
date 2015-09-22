@@ -10,10 +10,11 @@
 require 'net/http'
 require 'rubygems'
 require 'json'
-require './api_keys'
+require_relative 'api_keys'
+require_relative 'error_untappd'
 
 #
-# The +UntappdHelper+ object manages API calls and responses with the Untappd
+# The +UntappdHelper+ module manages API calls and responses with the Untappd
 # service.
 #
 module UntappdHelper
@@ -39,8 +40,7 @@ module UntappdHelper
 
         content = Net::HTTP.get(URI(url))
         response = JSON.parse(content)
-
-        VerifyReturnCode(response)
+        VerifyReturnCode(url, response)
 
         return response
     end
@@ -50,10 +50,9 @@ module UntappdHelper
     #
     # response: Full GET response from Untappd, including meta block
     #
-    def VerifyReturnCode(response)
-        if response["meta"]["code"] != 200
-            # todo: jtfinlay: Don't use general exception
-            raise Exception.new(response), "Error code received from Untappd"
+    def VerifyReturnCode(url, response)
+        if response["http_code"] || response["meta"]["code"] != 200
+            raise UntappdError.new(url, response)
         end
     end
 

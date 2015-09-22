@@ -7,14 +7,13 @@
 # Author: James Finlay
 ##
 
+require_relative 'untappd_helper'
+require_relative 'beer'
+
 #
 # The +DistinctBeers+ object acts as a helper class for pulling and managing 
 # user information from the Untappd service.
 #
-
-require './untappd_helper'
-require './beer'
-
 class DistinctBeers
     include UntappdHelper
 

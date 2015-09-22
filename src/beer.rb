@@ -8,16 +8,38 @@
 ##
 
 class BeerModel
-    attr_reader :id, :name, :label, :abv, :ibu, :style, 
-        :description, :rating_score, :rating_count
+    attr_reader :id, :name, :label, :abv, :ibu, :style, :description,
+        :rating_score, :rating_count, :price, :quantity, :url, :location
+
+
+    def initialize *args
+        case args.size
+        when 6
+            init_crawler *args
+        when 9
+            init_untappd *args
+        else
+            error
+        end
+    end
 
     #
-    # Initializes a beer model from given parameters
+    # Initiailizes a beer model from web crawler data
     #
-    # remark: Don't feel like explaining them all. They map to different beer attributes
+    def init_crawler name, price, qty, url, location, style
+        @name = name
+        @price = price
+        @quantity = qty
+        @url = url
+        @location = location
+        @style = style
+    end
+
     #
-    def initialize(id, name, label, abv, ibu, style, description, rating_score, rating_count)
-        @id = id
+    # Initializes beer models from Untappd variables
+    #
+    def init_untappd bid, name, label, abv, ibu, style, description, rating_score, rating_count
+        @id = bid
         @name = name
         @label = label
         @abv = abv

@@ -10,6 +10,7 @@
 
 require 'wombat'
 require 'sqlite3'
+require 'json'
 
 class CrawlTotalWine 
     include Wombat::Crawler
@@ -26,7 +27,7 @@ class CrawlTotalWine
         quantity({  css: ".plp-product-qty"})
         url({       xpath: ".//a[1]/@href" })
         location({  css: ".analyticsCountryState" })
-        style({     css: ".analyticsRegion" })
+        style({     css: ".analyticsRegion" }, :list)
     end
     more({ css: ".pager-next" })
 
@@ -50,11 +51,11 @@ class CrawlTotalWine
         @db.execute <<-SQL
             CREATE TABLE "#{@tableName}" (
                 name varchar(40),
-                price varchar(10),
+                price float,
                 quantity varchar(20),
                 url varchar(50),
                 location varchar(40),
-                style varchar(40)
+                style varchar(50)
             );
         SQL
     end
@@ -66,6 +67,8 @@ class CrawlTotalWine
     #
     def insertResponse(response)
         response.each do |beer|
+            beer['price'] = beer['price'].gsub(/[^\d\.]/, '').to_f
+            beer['style'] = JSON.generate(beer['style'])
             @db.execute "INSERT INTO #{@tableName} VALUES (?,?,?,?,?,?)", beer.values
         end
     end

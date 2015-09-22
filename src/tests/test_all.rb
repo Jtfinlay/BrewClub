@@ -7,5 +7,6 @@
 # Author: James Finlay
 ##
 
-require './test_beer'
+require_relative 'test_beer'
+require_relative 'test_untappd_helper'
 

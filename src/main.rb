@@ -7,9 +7,10 @@
 # Author: James Finlay
 ##
 
-require './api_keys'
-require './distinct_beers'
-require './crawl_totalwine'
+require_relative 'api_keys'
+require_relative 'distinct_beers'
+require_relative 'crawl_totalwine'
+require_relative 'filter_totalwine'
 
 if CLIENT_ID.empty? or CLIENT_SECRET.empty?
     puts "The Untappd client ID and secret must be set. Please do so in api_keys.rb"
@@ -38,14 +39,16 @@ users.each { |user|
     puts "#{user} has #{beers.length.to_s} distinct beers"
     beer_collection.concat beers
 }
-
 distinct_beers = beer_collection.uniq{|b| b.name}
 
-puts "Total of #{beer_collection.length.to_s} beers"
-puts "Total of #{distinct_beers.length.to_s} distinct beers"
-
-puts "Complete"
+puts "Users have checked in #{distinct_beers.length.to_s} distinct Untappd beers"
 
 ##### Filter store #####
+f = FilterTotalWine.new.filterWebData(crawler.db, "totalWine")
+
+puts "Remaining #{f.length}/#{crawler.db.execute('SELECT count(*) FROM totalWine')[0][0]} beers after preliminary filter"
 
 ##### Match store with Untappd #####
+
+
+puts "Complete"

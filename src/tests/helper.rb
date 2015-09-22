@@ -1,13 +1,13 @@
 # encoding: utf-8
 #
-# = test_helper.rb
+# = helper.rb
 #
 # Static Helper for running Unit Tests
 #
 # Author: James Finlay
 ##
 
-class TestHelper
+class Helper
 
     #
     # Load a mock file as a JSON blob
