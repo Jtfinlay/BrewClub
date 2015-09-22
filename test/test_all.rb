@@ -6,7 +6,7 @@
 #
 # Author: James Finlay
 ##
-
+require_relative 'helper'
 require_relative 'test_beer'
 require_relative 'test_untappd_helper'
 

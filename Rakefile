@@ -1,4 +1,4 @@
-task :default => [:run]
+task :default => [:test]
 
 task :run do
     ruby "src/main.rb"
