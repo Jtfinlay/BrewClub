@@ -19,32 +19,29 @@ class FilterTotalWine
     def initialize
         # qty filters - get rid of all packs and kegs
         # there might be some 9Ls left but.. yolo
-        @filter = "quantity not like '%Btls%'"
-        @filter += " and quantity not like '%Cans%'"
-        @filter += " and quantity not like '%Keg%'"
-        @filter += " and quantity not like '%pk%'"
-        @filter += " and quantity not like '%gift pack%'"
+        @filter = "quantity like '%Btls%'"
+        @filter += " or quantity like '%Cans%'"
+        @filter += " or quantity like '%Keg%'"
+        @filter += " or quantity like '%pk%'"
+        @filter += " or quantity like '%gift pack%'"
         # I don't want to spend over $20 on a single beer
-        @filter += " and price < 20.00"
+        @filter += " or price > 20.00"
         # Ciders aren't beer
-        @filter += " and style not like '%cider%'"
+        @filter += " or style like '%cider%'"
         # @jviau doesn't like stouts
-        @filter += " and style not like '%stout%'"
+        @filter += " or style like '%stout%'"
     end
 
     #
-    # Object constructor
+    # Deletes all data matching filter. 
+    #
+    # Remark: Would be smart to just trip a db field in the future for debugging purposes.
     #
     # db: SQLite database containing web catalogue
     # tableName: Beer data table
     #
     def filterWebData(db, tableName)
-        result = []
-        db.execute("SELECT * FROM #{tableName} WHERE #{@filter}").each do |e|
-            result.append BeerModel.new(e[0], e[1], e[2], e[3], 
-                e[4], e[5])
-        end
-        return result
+        db.execute("DELETE FROM #{tableName} WHERE #{@filter}")
     end
 
 

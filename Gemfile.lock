@@ -1,6 +1,9 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    RubyInline (3.12.4)
+      ZenTest (~> 4.3)
+    ZenTest (4.11.0)
     activesupport (4.2.4)
       i18n (~> 0.7)
       json (~> 1.7, >= 1.7.7)
@@ -14,6 +17,8 @@ GEM
     docile (1.1.5)
     domain_name (0.5.24)
       unf (>= 0.0.5, < 1.0.0)
+    fuzzy-string-match (0.9.7)
+      RubyInline (>= 3.8.6)
     http-cookie (1.0.2)
       domain_name (~> 0.5)
     i18n (0.7.0)
@@ -68,6 +73,7 @@ PLATFORMS
 
 DEPENDENCIES
   codecov
+  fuzzy-string-match
   rake
   sqlite3
   test-unit

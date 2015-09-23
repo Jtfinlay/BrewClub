@@ -5,3 +5,4 @@ gem 'wombat'
 gem 'test-unit'
 gem 'sqlite3'
 gem 'codecov', :require => false, :group => :test
+gem 'fuzzy-string-match'

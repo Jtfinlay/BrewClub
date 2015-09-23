@@ -7,6 +7,7 @@
 # Author: James Finlay
 ##
 
+require 'fuzzystringmatch'
 require_relative 'api_keys'
 require_relative 'distinct_beers'
 require_relative 'crawl_totalwine'
@@ -24,7 +25,12 @@ puts "Pulling store catalogue"
 crawler = CrawlTotalWine.new("totalWine")
 crawler.crawlAllPages
 
-puts "#{crawler.db.execute('SELECT count(*) FROM totalWine')[0][0]} beer types found"
+# todo: jtfinlay: Maybe just make your code better so you don't hit memory problems.
+db = crawler.db
+crawler = nil
+GC.start
+
+puts "#{db.execute('SELECT count(*) FROM totalWine')[0][0]} beer types found"
 
 ##### Untappd Logic #####
 
@@ -44,11 +50,24 @@ distinct_beers = beer_collection.uniq{|b| b.name}
 puts "Users have checked in #{distinct_beers.length.to_s} distinct Untappd beers"
 
 ##### Filter store #####
-f = FilterTotalWine.new.filterWebData(crawler.db, "totalWine")
+totalCount = db.execute('SELECT count(*) FROM totalWine')[0][0]
+filtered = FilterTotalWine.new.filterWebData(db, "totalWine")
 
-puts "Remaining #{f.length}/#{crawler.db.execute('SELECT count(*) FROM totalWine')[0][0]} beers after preliminary filter"
+puts "Remaining #{db.execute('SELECT count(*) FROM totalWine')[0][0]}/#{totalCount} beers after preliminary filter"
 
 ##### Match store with Untappd #####
 
+# todo: jtfinlay: This is a temp dump for checking string distance
+# todo: jtfinlay: Yes.. I know this code is just.... horrible.
+jarrow = FuzzyStringMatch::JaroWinkler.create( :native )
+open('dump.out', 'w') { |file|
+    db.execute('SELECT * FROM totalWine').each { |e|
+        b = BeerModel.new(e[0], e[1], e[2], e[3], e[4], e[5])
+        distinct_beers.each { |untappd|
+            distance = jarrow.getDistance( b.name, untappd.name)
+            file.puts "#{distance}: #{b.name} ------ #{untappd.name}"
+        }
+    }
+}
 
 puts "Complete"
