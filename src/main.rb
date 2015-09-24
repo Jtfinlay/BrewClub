@@ -8,15 +8,23 @@
 ##
 
 require 'fuzzystringmatch'
+
 require_relative 'api_keys'
-require_relative 'distinct_beers'
 require_relative 'crawl_totalwine'
+require_relative 'database_manager'
+require_relative 'distinct_beers'
 require_relative 'filter_totalwine'
 
 if CLIENT_ID.empty? or CLIENT_SECRET.empty?
     puts "The Untappd client ID and secret must be set. Please do so in api_keys.rb"
     exit
 end
+
+##### Set up database #####
+
+puts "Setting up database"
+dbm = DatabaseHelper.new
+
 
 ##### Web Crawler #####
 

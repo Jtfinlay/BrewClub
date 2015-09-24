@@ -9,18 +9,14 @@
 ##
 
 require 'wombat'
-require 'sqlite3'
-require 'json'
+
+require_relative 'database_manager'
 
 class CrawlTotalWine 
     include Wombat::Crawler
     attr_reader :db
 
-    BASE_PATH = "/beer/c/c0010?viewall=true&nonalcoholic=false&storename=1401&pagesize=200&page="
-
     base_url "http://www.totalwine.com/"
-    path BASE_PATH
-
     beers "css=.plp-list>li", :iterator do
         name({      css: ".plp-product-title" })
         price({     css: ".price" })
@@ -36,41 +32,9 @@ class CrawlTotalWine
     #
     # tableName: name to use for sqllite table
     #
-    def initialize(tableName)
+    def initialize storename, dbm
         super()
-        @tableName = tableName
-        @db = SQLite3::Database.new "online_catalogue.db"
-        createTotalWineTable
-    end
-
-    #
-    # Reset the Total Wine db table
-    #
-    def createTotalWineTable
-        @db.execute "DROP TABLE IF EXISTS #{@tableName};"
-        @db.execute <<-SQL
-            CREATE TABLE "#{@tableName}" (
-                name varchar(40),
-                price float,
-                quantity varchar(20),
-                url varchar(50),
-                location varchar(40),
-                style varchar(50)
-            );
-        SQL
-    end
-
-    #
-    # Add crawl responses to the db table
-    #
-    # response: series of beer metadata from web crawl
-    #
-    def insertResponse(response)
-        response.each do |beer|
-            beer['price'] = beer['price'].gsub(/[^\d\.]/, '').to_f
-            beer['style'] = JSON.generate(beer['style'])
-            @db.execute "INSERT INTO #{@tableName} VALUES (?,?,?,?,?,?)", beer.values
-        end
+        @basePath = "/beer/c/c0010?viewall=true&nonalcoholic=false&storename=#{storename}&pagesize=200&page="
     end
 
     #
@@ -79,11 +43,11 @@ class CrawlTotalWine
     def crawlAllPages
         page = 1
         loop do
-            puts "Path: #{BASE_PATH}#{page.to_s}"
-            path BASE_PATH + page.to_s
+            puts "Path: #{@basePath}#{page.to_s}"
+            path "#{@basePath}#{page.to_s}"
 
             response = crawl
-            insertResponse response["beers"]
+            insertCrawlerBlob response["beers"]
 
             break if response["more"].nil?
             page += 1
