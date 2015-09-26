@@ -1,0 +1,208 @@
+{
+  "beers": [
+    {
+      "name": "Not Your Father's Root Beer",
+      "price": "$ 10.99",
+      "quantity": "6pk-12oz Btls",
+      "url": "\/beer\/specialty-styles\/herbed-spiced-beer\/not-your-fathers-root-beer\/p\/146849126?s=1401&igrules=true",
+      "location": "United States",
+      "style": [
+        "Specialty Styles"
+      ]
+    },
+    {
+      "name": "Corona Extra",
+      "price": "$ 22.99",
+      "quantity": "24-12oz Btls",
+      "url": "\/beer\/lager\/american-style-lager\/corona-extra\/p\/3361128?s=1401&igrules=true",
+      "location": "Mexico",
+      "style": [
+        "Lager"
+      ]
+    },
+    {
+      "name": "Heineken",
+      "price": "$ 22.99",
+      "quantity": "24-12oz Btls",
+      "url": "\/beer\/lager\/euro-pale-lager\/heineken\/p\/3380128?s=1401&igrules=true",
+      "location": "Netherlands",
+      "style": [
+        "Lager"
+      ]
+    },
+    {
+      "name": "Stella Artois",
+      "price": "$ 12.99",
+      "quantity": "12pk-11oz Btls",
+      "url": "\/beer\/lager\/euro-pale-lager\/stella-artois\/p\/92131127?s=1401&igrules=true",
+      "location": "Belgium",
+      "style": [
+        "Lager"
+      ]
+    },
+    {
+      "name": "Coors Light",
+      "price": "$ 20.49",
+      "quantity": "30-12oz Cans",
+      "url": "\/beer\/lager\/light-lager\/coors-light\/p\/3283124?s=1401&igrules=true",
+      "location": "United States",
+      "style": [
+        "Lager"
+      ]
+    },
+    {
+      "name": "Miller Lite",
+      "price": "$ 20.99",
+      "quantity": "30-12oz Cans",
+      "url": "\/beer\/lager\/light-lager\/miller-lite\/p\/3291124?s=1401&igrules=true",
+      "location": "United States",
+      "style": [
+        "Lager"
+      ]
+    },
+    {
+      "name": "Bud Light",
+      "price": "$ 17.99",
+      "quantity": "24-12oz Cans",
+      "url": "\/beer\/lager\/light-lager\/bud-light\/p\/31123?s=1401&igrules=true",
+      "location": "United States",
+      "style": [
+        "Lager"
+      ]
+    },
+    {
+      "name": "Heineken",
+      "price": "$ 12.99",
+      "quantity": "12pk-12oz Btls",
+      "url": "\/beer\/lager\/euro-pale-lager\/heineken\/p\/3380127?s=1401&igrules=true",
+      "location": "Netherlands",
+      "style": [
+        "Lager"
+      ]
+    },
+    {
+      "name": "Bud Light",
+      "price": "$ 20.99",
+      "quantity": "30-12oz Cans",
+      "url": "\/beer\/lager\/light-lager\/bud-light\/p\/31124?s=1401&igrules=true",
+      "location": "United States",
+      "style": [
+        "Lager"
+      ]
+    },
+    {
+      "name": "Corona Extra",
+      "price": "$ 12.99",
+      "quantity": "12pk-12oz Btls",
+      "url": "\/beer\/lager\/american-style-lager\/corona-extra\/p\/3361127?s=1401&igrules=true",
+      "location": "Mexico",
+      "style": [
+        "Lager"
+      ]
+    },
+    {
+      "name": "Blue Moon Belgian White Belgian-Style Wheat Ale",
+      "price": "$ 12.99",
+      "quantity": "12pk-12oz Btls",
+      "url": "\/beer\/ale\/wheat-ale\/witbier\/blue-moon-belgian-white-belgian-style-wheat-ale\/p\/9931127?s=1401&igrules=true",
+      "location": "United States",
+      "style": [
+        "Ale",
+        "Witbier"
+      ]
+    },
+    {
+      "name": "Bud Light",
+      "price": "$ 23.99",
+      "quantity": "36-12oz Cans",
+      "url": "\/beer\/lager\/light-lager\/bud-light\/p\/311125?s=1401&igrules=true",
+      "location": "United States",
+      "style": [
+        "Lager"
+      ]
+    },
+    {
+      "name": "Bud Light",
+      "price": "$ 17.99",
+      "quantity": "24-12oz Btls",
+      "url": "\/beer\/lager\/light-lager\/bud-light\/p\/31128?s=1401&igrules=true",
+      "location": "United States",
+      "style": [
+        "Lager"
+      ]
+    },
+    {
+      "name": "Corona Light",
+      "price": "$ 22.99",
+      "quantity": "24-12oz Btls",
+      "url": "\/beer\/lager\/light-lager\/corona-light\/p\/3362128?s=1401&igrules=true",
+      "location": "Mexico",
+      "style": [
+        "Lager"
+      ]
+    },
+    {
+      "name": "Miller Lite",
+      "price": "$ 17.99",
+      "quantity": "24-12oz Btls",
+      "url": "\/beer\/lager\/light-lager\/miller-lite\/p\/3291128?s=1401&igrules=true",
+      "location": "United States",
+      "style": [
+        "Lager"
+      ]
+    },
+    {
+      "name": "Coney Island Root Beer",
+      "price": "$ 10.99",
+      "quantity": "6pk-12oz Btls",
+      "url": "\/beer\/specialty-styles\/specialty-beer\/coney-island-root-beer\/p\/150840126?s=1401&igrules=true",
+      "location": "United States",
+      "style": [
+        "Specialty Styles"
+      ]
+    },
+    {
+      "name": "New Belgium Fat Tire",
+      "price": "$ 12.99",
+      "quantity": "12pk-12oz Btls",
+      "url": "\/beer\/ale\/amber-red-ale\/american-amber-red-ale\/new-belgium-fat-tire\/p\/101731127?s=1401&igrules=true",
+      "location": "United States",
+      "style": [
+        "Ale",
+        "American Amber\/Red Ale"
+      ]
+    },
+    {
+      "name": "Samuel Adams OctoberFest",
+      "price": "$ 13.99",
+      "quantity": "12pk-12oz Btls",
+      "url": "\/beer\/lager\/marzen-oktoberfest\/samuel-adams-octoberfest\/p\/3412127?s=1401&igrules=true",
+      "location": "United States",
+      "style": [
+        "Lager"
+      ]
+    },
+    {
+      "name": "Sierra Nevada Pale Ale",
+      "price": "$ 13.99",
+      "quantity": "12pk-12oz Btls",
+      "url": "\/beer\/ale\/pale-ale\/american-pale-ale\/sierra-nevada-pale-ale\/p\/8155127?s=1401&igrules=true",
+      "location": "United States",
+      "style": [
+        "Ale",
+        "American Pale Ale"
+      ]
+    },
+    {
+      "name": "Southern Tier Pumking Ale",
+      "price": "$ 14.99",
+      "quantity": "4pk-12oz Btls",
+      "url": "\/beer\/specialty-styles\/pumpkin-ale\/southern-tier-pumking-ale\/p\/1050832134?s=1401&igrules=true",
+      "location": "United States",
+      "style": [
+        "Specialty Styles"
+      ]
+    }
+  ],
+  "more": "Next"
+}

@@ -10,9 +10,9 @@
 require 'fuzzystringmatch'
 
 require_relative 'api_keys'
+require_relative 'beer_helper'
 require_relative 'crawl_totalwine'
 require_relative 'database_manager'
-require_relative 'distinct_beers'
 require_relative 'filter_totalwine'
 
 if CLIENT_ID.empty? or CLIENT_SECRET.empty?
@@ -23,45 +23,32 @@ end
 ##### Set up database #####
 
 puts "Setting up database"
-dbm = DatabaseHelper.new
-
+dbm = DatabaseManager.new("beer_catalog.db")
 
 ##### Web Crawler #####
 
 puts "Pulling store catalogue"
-
-crawler = CrawlTotalWine.new("totalWine")
+crawler = CrawlTotalWine.new(1401, dbm)
 crawler.crawlAllPages
 
-# todo: jtfinlay: Maybe just make your code better so you don't hit memory problems.
-db = crawler.db
-crawler = nil
-GC.start
-
-puts "#{db.execute('SELECT count(*) FROM totalWine')[0][0]} beer types found"
+puts "#{dbm.getCrawlerCount} beer entries found"
 
 ##### Untappd Logic #####
 
 puts "Pulling Untappd catalogue"
 
-helper = DistinctBeers.new
-users = ["jtfinlay", "esdegraff", "jviau"]
-
-beer_collection = []
-users.each { |user|
-    beers = helper.pullAllDistinctBeers(user)
-    puts "#{user} has #{beers.length.to_s} distinct beers"
-    beer_collection.concat beers
+helper = BeerHelper.new
+["jtfinlay", "esdegraff", "jviau"].each { |user|
+    helper.pullAllDistinctBeers(user, dbm)
 }
-distinct_beers = beer_collection.uniq{|b| b.name}
-
-puts "Users have checked in #{distinct_beers.length.to_s} distinct Untappd beers"
+puts "Users have checked in #{dbm.getUntappdUniqueCount} distinct Untappd beers"
 
 ##### Filter store #####
-totalCount = db.execute('SELECT count(*) FROM totalWine')[0][0]
-filtered = FilterTotalWine.new.filterWebData(db, "totalWine")
 
-puts "Remaining #{db.execute('SELECT count(*) FROM totalWine')[0][0]}/#{totalCount} beers after preliminary filter"
+preTotal = dbm.getCrawlerCount
+filtered = FilterTotalWine.new.filterWebData(dbm.db, dbm.crawlerTable)
+
+puts "Remaining #{dbm.getCrawlerCount}/#{preTotal} beers after preliminary filter"
 
 ##### Match store with Untappd #####
 
@@ -69,11 +56,11 @@ puts "Remaining #{db.execute('SELECT count(*) FROM totalWine')[0][0]}/#{totalCou
 # todo: jtfinlay: Yes.. I know this code is just.... horrible.
 jarrow = FuzzyStringMatch::JaroWinkler.create( :native )
 open('dump.out', 'w') { |file|
-    db.execute('SELECT * FROM totalWine').each { |e|
-        b = BeerModel.new(e[0], e[1], e[2], e[3], e[4], e[5])
-        distinct_beers.each { |untappd|
-            distance = jarrow.getDistance( b.name, untappd.name)
-            file.puts "#{distance}: #{b.name} ------ #{untappd.name}"
+    dbm.db.execute("SELECT * FROM #{dbm.crawlerTable}").each { |e|
+        web = BeerModel.new(e[0], e[1], e[2], e[3], e[4], e[5])
+        dbm.getUntappdUnique.each { |uname|
+            distance = jarrow.getDistance( b.name, uname)
+            file.puts "#{distance}: #{b.name} ------ #{uname}"
         }
     }
 }

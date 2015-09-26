@@ -14,7 +14,6 @@ require_relative 'database_manager'
 
 class CrawlTotalWine 
     include Wombat::Crawler
-    attr_reader :db
 
     base_url "http://www.totalwine.com/"
     beers "css=.plp-list>li", :iterator do
@@ -34,6 +33,7 @@ class CrawlTotalWine
     #
     def initialize storename, dbm
         super()
+        @dbm = dbm
         @basePath = "/beer/c/c0010?viewall=true&nonalcoholic=false&storename=#{storename}&pagesize=200&page="
     end
 
@@ -47,7 +47,7 @@ class CrawlTotalWine
             path "#{@basePath}#{page.to_s}"
 
             response = crawl
-            insertCrawlerBlob response["beers"]
+            @dbm.insertCrawlerBlob response["beers"]
 
             break if response["more"].nil?
             page += 1

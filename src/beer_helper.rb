@@ -1,6 +1,6 @@
 # encoding: utf-8
 #
-# = distinct_beers.rb
+# = beer_helper.rb
 #
 # Class for managing distinct beer queries
 #
@@ -8,13 +8,12 @@
 ##
 
 require_relative 'untappd_helper'
-require_relative 'beer'
 
 #
 # The +DistinctBeers+ object acts as a helper class for pulling and managing 
 # user information from the Untappd service.
 #
-class DistinctBeers
+class BeerHelper
     include UntappdHelper
 
     BEER_SEARCH_METHOD = "user/beers/"
@@ -36,19 +35,15 @@ class DistinctBeers
     #
     # username: User to query
     #
-    def pullAllDistinctBeers(username)
-
-        results = []
+    def pullAllDistinctBeers(username, dbm)
         offset = 0
         loop do
             response = pullDistinctBeers(username, offset)
             offset += response["beers"]["count"]
 
             break if response["beers"]["count"] == 0
-            results.concat BeerModel.populateFromJsonList(response)
+            dbm.insertUntappdBlob(response)
         end
-
-        return results
     end
 
 end
