@@ -32,7 +32,7 @@ class TestDatabaseManager < Test::Unit::TestCase
     end
 
     def test_initialize
-        dbm = DatabaseManager.new(DB_NAME)
+        dbm = DatabaseManager.new(DB_NAME, true)
         assert_nothing_raised do
             dbm.db.execute "SELECT * FROM #{dbm.crawlerTable}"
             dbm.db.execute "SELECT * FROM #{dbm.untappdTable}"
@@ -44,7 +44,7 @@ class TestDatabaseManager < Test::Unit::TestCase
         data = Helper.loadMockData("test/mocks/TotalWine.json")["beers"]
         assert_not_nil data
 
-        dbm = DatabaseManager.new(DB_NAME)
+        dbm = DatabaseManager.new(DB_NAME, true)
         dbm.insertCrawlerBlob(data)
 
         assert_equal 20, dbm.getCrawlerCount
@@ -55,7 +55,7 @@ class TestDatabaseManager < Test::Unit::TestCase
         assert_not_nil data
         assert data["beers"]["count"] > 0
 
-        dbm = DatabaseManager.new(DB_NAME)
+        dbm = DatabaseManager.new(DB_NAME, true)
         dbm.insertUntappdBlob(data)
 
         assert_equal data["beers"]["count"], dbm.getUntappdCount

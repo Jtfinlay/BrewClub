@@ -7,8 +7,9 @@
 # Author: James Finlay
 ##
 
-require 'sqlite3'
+require 'fuzzystringmatch'
 require 'json'
+require 'sqlite3'
 
 class DatabaseManager
     attr_reader :db, :crawlerTable, :untappdTable
@@ -18,13 +19,13 @@ class DatabaseManager
     #
     # todo: save old table entries and use versioning
     #
-    def initialize(dbName)
+    def initialize(dbName, resetTables=false)
         @crawlerTable = "crawlerTable"
         @untappdTable = "untappdTable"
 
         @db = SQLite3::Database.new dbName
-        resetCrawlerTable
-        resetUntappdTable
+        resetCrawlerTable if resetTables
+        resetUntappdTable if resetTables
     end
 
     #
@@ -53,6 +54,7 @@ class DatabaseManager
             CREATE TABLE "#{@untappdTable}" (
                 id float,
                 name varchar(40),
+                brewery varchar(60),
                 beer_label varchar(40),
                 abv float,
                 ibu float,
@@ -81,13 +83,71 @@ class DatabaseManager
     def insertUntappdBlob(data)
         data["beers"]["items"].map { |item|
             b = item["beer"]
-            @db.execute "INSERT INTO #{@untappdTable} VALUES (?,?,?,?,?,?,?,?,?)",
-                [b["bid"], b["beer_name"], b["beer_label"], b["beer_abv"],
+            @db.execute "INSERT INTO #{@untappdTable} VALUES (?,?,?,?,?,?,?,?,?,?)",
+                [b["bid"], b["beer_name"], item["brewery"]["brewery_name"],
+                b["beer_label"], b["beer_abv"],
                 b["beer_ibu"], b["beer_style"], b["description"], 
                 b["rating_score"], b["rating_count"]]
         }
     end
 
+    #
+    # Dumps all beer matches that are within 'minDistance'
+    #
+    # fileName: file to dump to
+    # minDistance: fuzzy string distance, between 0 and 1
+    #
+    def dumpFuzzyStringDistance(fileName, minDistance)
+        jarrow = FuzzyStringMatch::JaroWinkler.create( :native )
+        open(fileName, 'w') { |file|
+            iterateUntappdTable { |u|
+                u = formatBeerName("#{u[2]} #{u[1]}")
+                
+                iterateCrawlerTable { |c|
+                    c = formatBeerName(c[0])
+                    distance = jarrow.getDistance(u, c)
+                    file.puts "#{distance}\t#{c}\t#{u}" if distance >= minDistance
+                }
+            }
+        }
+    end
+
+    def formatBeerName(beer)
+        # Brewery suffix
+        beer.slice! "Brewery & Taproom"
+        beer.slice! "Brewery"
+        beer.slice! "Brewing Company"
+        beer.slice! "Brewing Co."
+        beer.slice! "Beer Co."
+        beer.slice! "Family Brewers"
+        beer.slice! "Breweries"
+        beer.slice! "Brasserie"
+        beer.slice! "Brewing"
+
+        # Beer names
+        beer.sub!("DBA", "Double Barrel Ale")
+        beer.sub!("IPA", "India Pale Ale")
+        beer.sub!("Kölsch", "Kolsch")
+        return beer
+    end
+
+    def iterateUntappdTable
+        step_size = 20
+        (0..getUntappdCount).step(step_size) do |i|
+            db.execute("SELECT * FROM #{@untappdTable} LIMIT #{step_size} OFFSET #{i}").each do |beer|
+                yield beer
+            end
+        end
+    end
+
+    def iterateCrawlerTable
+        step_size = 20
+        (0..getCrawlerCount).step(step_size) do |i|
+            db.execute("SELECT * FROM #{@crawlerTable} LIMIT #{step_size} OFFSET #{i}").each do |beer|
+                yield beer
+            end
+        end
+    end
 
     #
     # Query count of crawler table

@@ -7,8 +7,6 @@
 # Author: James Finlay
 ##
 
-require 'fuzzystringmatch'
-
 require_relative 'api_keys'
 require_relative 'beer_helper'
 require_relative 'crawl_totalwine'
@@ -23,7 +21,7 @@ end
 ##### Set up database #####
 
 puts "Setting up database"
-dbm = DatabaseManager.new("beer_catalog.db")
+dbm = DatabaseManager.new("beer_catalog.db", true)
 
 ##### Web Crawler #####
 
@@ -52,17 +50,6 @@ puts "Remaining #{dbm.getCrawlerCount}/#{preTotal} beers after preliminary filte
 
 ##### Match store with Untappd #####
 
-# todo: jtfinlay: This is a temp dump for checking string distance
-# todo: jtfinlay: Yes.. I know this code is just.... horrible.
-jarrow = FuzzyStringMatch::JaroWinkler.create( :native )
-open('dump.out', 'w') { |file|
-    dbm.db.execute("SELECT * FROM #{dbm.crawlerTable}").each { |e|
-        web = BeerModel.new(e[0], e[1], e[2], e[3], e[4], e[5])
-        dbm.getUntappdUnique.each { |uname|
-            distance = jarrow.getDistance( b.name, uname)
-            file.puts "#{distance}: #{b.name} ------ #{uname}"
-        }
-    }
-}
+dbm.dumpFuzzyStringDistance("dump.out", 0.7)
 
 puts "Complete"
