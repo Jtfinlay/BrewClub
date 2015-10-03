@@ -31,7 +31,7 @@ Apply a bunch of filters, compare the store catalogue to your check ins, and voi
 You can run it yourself! All you need is an Untappd Client/Key, and a touch of ruby
 
 ```shell
-$ git clone git://github.com/afontaine/apartment-intercom-adapter.git
+$ git clone git://github.com/Jtfinlay/BeerClub.git
 $ bundle
 $ rake run
 ```
