@@ -11,6 +11,8 @@ require 'fuzzystringmatch'
 require 'json'
 require 'sqlite3'
 
+require_relative './beer_model'
+
 class DatabaseManager
     attr_reader :db, :crawlerTable, :untappdTable
 
@@ -101,50 +103,34 @@ class DatabaseManager
         jarrow = FuzzyStringMatch::JaroWinkler.create( :native )
         open(fileName, 'w') { |file|
             iterateUntappdTable { |u|
-                u = formatBeerName("#{u[2]} #{u[1]}")
-                
                 iterateCrawlerTable { |c|
-                    c = formatBeerName(c[0])
-                    distance = jarrow.getDistance(u, c)
-                    file.puts "#{distance}\t#{c}\t#{u}" if distance >= minDistance
+                    distance = jarrow.getDistance(u.display_name, c.display_name)
+                    file.puts "#{distance}\t#{c.display_name}\t#{u.display_name}" if distance >= minDistance
                 }
             }
         }
     end
 
-    def formatBeerName(beer)
-        # Brewery suffix
-        beer.slice! "Brewery & Taproom"
-        beer.slice! "Brewery"
-        beer.slice! "Brewing Company"
-        beer.slice! "Brewing Co."
-        beer.slice! "Beer Co."
-        beer.slice! "Family Brewers"
-        beer.slice! "Breweries"
-        beer.slice! "Brasserie"
-        beer.slice! "Brewing"
-
-        # Beer names
-        beer.sub!("DBA", "Double Barrel Ale")
-        beer.sub!("IPA", "India Pale Ale")
-        beer.sub!("Kölsch", "Kolsch")
-        return beer
-    end
-
+    #
+    # Iterate through the SQL Untappd table, without a huge memory footprint
+    #
     def iterateUntappdTable
-        step_size = 20
+        step_size = 15
         (0..getUntappdCount).step(step_size) do |i|
             db.execute("SELECT * FROM #{@untappdTable} LIMIT #{step_size} OFFSET #{i}").each do |beer|
-                yield beer
+                yield BeerModel.new(beer)
             end
         end
     end
 
+    #
+    # Iterate through the SQL Crawler table, without a huge memory footprint
+    #
     def iterateCrawlerTable
-        step_size = 20
+        step_size = 15
         (0..getCrawlerCount).step(step_size) do |i|
             db.execute("SELECT * FROM #{@crawlerTable} LIMIT #{step_size} OFFSET #{i}").each do |beer|
-                yield beer
+                yield BeerModel.new(beer)
             end
         end
     end
