@@ -38,7 +38,7 @@ $ rake run
 
 Deploy away. Uses SQLite, so no DB setup required.
 
-[1](http://www.totalwine.com)
-[2](http://www.bbc.com/news/blogs-news-from-elsewhere-30777516)
+[1]: http://www.totalwine.com
+[2]: http://www.bbc.com/news/blogs-news-from-elsewhere-30777516
 
 
